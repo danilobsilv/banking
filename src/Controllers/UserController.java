@@ -92,4 +92,17 @@ public class UserController{
             System.err.println("Erro ao exibir usuários: " + e.getMessage());
         }
     }
+
+    public void editUser(String email){
+
+
+    }
+
+    public void deleteUser(String email){
+
+    }
+
+    public boolean verifyUser(String email){
+        return true;
+    }
 }
