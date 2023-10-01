@@ -43,11 +43,34 @@ public class UserController{
                 }
             }
         } catch (SQLException Error) {
+            System.err.println("Error getting user's ID: " + Error.getMessage());
             throw Error;
         }
         return userId;
     }
 
+    public User getUserById(int userId) throws SQLException {
+        String query = "SELECT * FROM users WHERE user_id = ?";
+        User user = null;
+        try (Connection connection = DBConnection.getConnection(dbPath);
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setInt(1, userId);
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    String user_email = resultSet.getString("user_email");
+                    String username = resultSet.getString("username");
+                    String password = resultSet.getString("password");
+
+                    user = new User(username, user_email, password);
+                }
+            }
+        } catch (SQLException Error) {
+            System.err.println("Error getting user: " + Error.getMessage());
+            throw Error;
+        }
+        return user;
+    }
 
 
     public static List<User> getUsers() throws SQLException {
@@ -71,7 +94,7 @@ public class UserController{
         return users;
     }
 
-    public void showUsers() {
+    public void showUsers() throws SQLException {
         try {
             List<User> users = getUsers();
 
@@ -79,7 +102,7 @@ public class UserController{
                 System.out.println("No user was found.");
             }
             else {
-                System.out.println("Users list:");
+                System.out.println("Users list:\n");
                 for (User user : users) {
                     System.out.println("Username: " + user.getUsername());
                     System.out.println("Email: " + user.getEmail());
@@ -88,21 +111,82 @@ public class UserController{
                 }
             }
         }
-        catch (SQLException e) {
-            System.err.println("Erro ao exibir usuários: " + e.getMessage());
+        catch (SQLException Error) {
+            System.err.println("Error on showing users: " + Error.getMessage());
+            throw Error;
         }
     }
 
-    public void editUser(String email){
+    public void editUserUsername(int userId, String newUsername) throws  SQLException{
+        String query = "UPDATE users SET username = ? WHERE user_id = ?";
 
+        try{
+            ExecuteQuery executeQuery = new ExecuteQuery();
+            executeQuery.executeQuery(query, newUsername, userId);
 
+            System.out.println("Username updated successfully!");
+        }
+        catch (SQLException Error){
+            System.err.println("Error updating username: " + Error.getMessage());
+            throw Error;
+        }
     }
 
-    public void deleteUser(String email){
+    public void editUserPassword(int userId, String newPassword) throws SQLException{
+        String query = "UPDATE users SET password = ? WHERE user_id = ?";
 
+        try{
+            ExecuteQuery executeQuery = new ExecuteQuery();
+            executeQuery.executeQuery(query,newPassword, userId);
+
+            System.out.println("Password updated successfully!");
+        }
+        catch(SQLException Error){
+            System.err.println("Error updating password: " + Error.getMessage());
+            throw Error;
+        }
     }
 
-    public boolean verifyUser(String email){
-        return true;
+    public void deleteUser(int userId) throws SQLException {
+        String query = "DELETE FROM users where user_id = ?";
+
+        try{
+            ExecuteQuery executeQuery = new ExecuteQuery();
+            executeQuery.executeQuery(query, userId);
+
+            System.out.println("User successfully deleted!");
+        }
+        catch (SQLException Error){
+            System.err.println("Error deleting user: " + Error.getMessage());
+            throw Error;
+        }
+    }
+
+    public boolean verifyUserEmail(String userEmail) throws SQLException {
+        boolean verification = false;
+        String query = "SELECT COUNT(*) FROM users WHERE user_email = ?";
+
+        try {
+            verification = executeQuery.emailExists(dbPath, query, userEmail);
+        } catch (SQLException Error) {
+            System.err.println("Error verifying user's email: " + Error.getMessage());
+            throw Error;
+        }
+
+            return verification;
+    }
+
+    public boolean verifyUserPassword(String userPassword) throws SQLException{
+        boolean verification = false;
+        String query = "SELECT COUNT(*) FROM users WHERE password = ?";
+
+        try{
+            verification = executeQuery.passwordExists(dbPath, query, userPassword);
+        }
+        catch (SQLException Error){
+            System.err.println("Error verifying user's password: " + Error.getMessage());
+            throw Error;
+        }
+        return verification;
     }
 }
