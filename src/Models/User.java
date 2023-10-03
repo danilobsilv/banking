@@ -1,16 +1,21 @@
 package src.Models;
 
+import java.util.Date;
+
 public class User{
 
     protected String username;
     protected String email;
     protected String password;
 
-    public User(String username,String email, String password) {
+    protected Date creationDate;
+    public User(String username, String email, String password, Date creationDate) {
         this.username = username;
         this.email = email;
         this.password = password;
+        this.creationDate = creationDate;
     }
+
 
     public String getUsername() {
         return this.username;
@@ -30,6 +35,10 @@ public class User{
 
     public String getPassword() {
         return password;
+    }
+
+    public Date getCreationDate() {
+        return creationDate;
     }
 
     public void setPassword(String password) {
