@@ -1,15 +1,17 @@
 package src.Models;
 
+import src.enumerate.AccountType;
+
 import java.util.Date;
 
 public class BankAccount {
 
     String accountNumber;
     Float balance;
-    String accountType;
+    AccountType accountType;
     Date dateCreated;
 
-    public BankAccount(String accountNumber, Float balance, String accountType, Date dateCreated) {
+    public BankAccount(String accountNumber, Float balance, AccountType accountType, Date dateCreated) {
         this.accountNumber = accountNumber;
         this.balance = balance;
         this.accountType = accountType;
@@ -40,11 +42,11 @@ public class BankAccount {
         this.balance = balance;
     }
 
-    public String getAccountType() {
+    public AccountType getAccountType() { // Correção aqui
         return accountType;
     }
 
-    public void setAccountType(String accountType) {
+    public void setAccountType(AccountType accountType) { // Correção aqui
         this.accountType = accountType;
     }
 }
