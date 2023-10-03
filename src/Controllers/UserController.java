@@ -4,13 +4,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
 import java.util.ArrayList;
 import java.util.List;
-
+import java.sql.Date;
 import src.Database.DBConnection;
 import src.Database.ExecuteQuery;
-
 import src.Models.User;
 
 public class UserController{
@@ -18,19 +16,18 @@ public class UserController{
     private final static String dbPath = "bankApp.db";
     ExecuteQuery executeQuery = new ExecuteQuery();
 
-    public UserController() {
-    }
+    public UserController() {}
 
     public void createUser(User user) throws SQLException {
-        String query = "INSERT INTO users (username, user_email, password) " +
-                "VALUES (?, ?, ?)";
-        executeQuery.executeQuery(query, user.getUsername(), user.getEmail(), user.getPassword());
+        String query = "INSERT INTO users (username, userEmail, password, datestamp) VALUES (?, ?, ?, ?)";
+        executeQuery.executeQuery(query, user.getUsername(), user.getEmail(), user.getPassword(), user.getCreationDate());
     }
+
 
     public int getUserId(String email) throws SQLException {
         int userId = -1; // in case no user is found
 
-        String query = "SELECT user_id FROM users WHERE user_email = ?";
+        String query = "SELECT userId FROM users WHERE userEmail = ?";
 
         try (Connection connection = DBConnection.getConnection(dbPath);
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -39,7 +36,7 @@ public class UserController{
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
-                    userId = resultSet.getInt("user_id");
+                    userId = resultSet.getInt("userId");
                 }
             }
         } catch (SQLException Error) {
@@ -50,7 +47,7 @@ public class UserController{
     }
 
     public User getUserById(int userId) throws SQLException {
-        String query = "SELECT * FROM users WHERE user_id = ?";
+        String query = "SELECT * FROM users WHERE userId = ?";
         User user = null;
         try (Connection connection = DBConnection.getConnection(dbPath);
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -58,11 +55,13 @@ public class UserController{
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
-                    String user_email = resultSet.getString("user_email");
+                    String user_email = resultSet.getString("userEmail");
                     String username = resultSet.getString("username");
                     String password = resultSet.getString("password");
+                    long creationDateMillis = resultSet.getLong("datestamp");
 
-                    user = new User(username, user_email, password);
+                    Date creationDate = new Date(creationDateMillis);
+                    user = new User(username, user_email, password, creationDate);
                 }
             }
         } catch (SQLException Error) {
@@ -73,7 +72,8 @@ public class UserController{
     }
 
 
-    public static List<User> getUsers() throws SQLException {
+
+    public List<User> getUsers() throws SQLException {
         List<User> users = new ArrayList<>();
         String query = "SELECT * FROM users";
 
@@ -83,18 +83,20 @@ public class UserController{
 
             while (resultSet.next()) {
                 //   int user_id = resultSet.getInt("user_id");
-                String user_email = resultSet.getString("user_email");
+                String user_email = resultSet.getString("userEmail");
                 String username = resultSet.getString("username");
                 String password = resultSet.getString("password");
+                long creationDateMillis  = resultSet.getLong("datestamp");
 
-                User user = new User(username, user_email, password);
+                Date creationDate = new Date(creationDateMillis);
+                User user = new User(username, user_email, password, creationDate);
                 users.add(user);
             }
         }
         return users;
     }
 
-    public void showUsers() throws SQLException {
+    public boolean showUsers() throws SQLException {
         try {
             List<User> users = getUsers();
 
@@ -115,10 +117,11 @@ public class UserController{
             System.err.println("Error on showing users: " + Error.getMessage());
             throw Error;
         }
+        return true;
     }
 
     public void editUserUsername(int userId, String newUsername) throws  SQLException{
-        String query = "UPDATE users SET username = ? WHERE user_id = ?";
+        String query = "UPDATE users SET username = ? WHERE userId = ?";
 
         try{
             ExecuteQuery executeQuery = new ExecuteQuery();
@@ -133,7 +136,7 @@ public class UserController{
     }
 
     public void editUserPassword(int userId, String newPassword) throws SQLException{
-        String query = "UPDATE users SET password = ? WHERE user_id = ?";
+        String query = "UPDATE users SET password = ? WHERE userId = ?";
 
         try{
             ExecuteQuery executeQuery = new ExecuteQuery();
@@ -147,16 +150,13 @@ public class UserController{
         }
     }
 
-    public void deleteUser(int userId) throws SQLException {
-        String query = "DELETE FROM users where user_id = ?";
+    public void deleteUser(int userId) throws Exception {
+        String query = "DELETE FROM users WHERE userId = ?";
 
-        try{
-            ExecuteQuery executeQuery = new ExecuteQuery();
+        try (ExecuteQuery executeQuery = new ExecuteQuery()) {
             executeQuery.executeQuery(query, userId);
-
             System.out.println("User successfully deleted!");
-        }
-        catch (SQLException Error){
+        } catch (Exception Error) {
             System.err.println("Error deleting user: " + Error.getMessage());
             throw Error;
         }
@@ -164,15 +164,14 @@ public class UserController{
 
     public boolean verifyUserEmail(String userEmail) throws SQLException {
         boolean verification = false;
-        String query = "SELECT COUNT(*) FROM users WHERE user_email = ?";
+        String query = "SELECT COUNT(*) FROM users WHERE userEmail = ?";
 
         try {
-            verification = executeQuery.emailExists(dbPath, query, userEmail);
+            verification = executeQuery.emailExists(query, userEmail);
         } catch (SQLException Error) {
             System.err.println("Error verifying user's email: " + Error.getMessage());
             throw Error;
         }
-
             return verification;
     }
 
@@ -181,10 +180,24 @@ public class UserController{
         String query = "SELECT COUNT(*) FROM users WHERE password = ?";
 
         try{
-            verification = executeQuery.passwordExists(dbPath, query, userPassword);
+            verification = executeQuery.passwordExists(query, userPassword);
         }
         catch (SQLException Error){
             System.err.println("Error verifying user's password: " + Error.getMessage());
+            throw Error;
+        }
+        return verification;
+    }
+
+    public boolean verifyUserId(int userId) throws SQLException{
+        boolean verification = false;
+        String query = "SELECT COUNT(*) FROM users WHERE userId = ?";
+
+        try{
+            verification = executeQuery.checkUserIdExists(userId);
+        }
+        catch (SQLException Error){
+            System.err.println("Error verifying user's ID: " + Error.getMessage());
             throw Error;
         }
         return verification;
