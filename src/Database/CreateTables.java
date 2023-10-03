@@ -7,7 +7,7 @@ import java.sql.Statement;
 
 public class CreateTables {
 
-    public void createTables(){
+    public void createTables() {
         Connection connection = null;
         Statement statement = null;
 
@@ -20,82 +20,81 @@ public class CreateTables {
             statement = connection.createStatement();
 
             String createUsersTable = "CREATE TABLE IF NOT EXISTS users (" +
-                    "user_id INTEGER PRIMARY KEY AUTOINCREMENT," +
-                    "user_email TEXT NOT NULL, " +
+                    "userId INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    "userEmail TEXT NOT NULL, " +
                     "username TEXT NOT NULL," +
-                    "password TEXT NOT NULL)";
+                    "password TEXT NOT NULL," +
+                    "datestamp TEXT NOT NULL)";
             statement.executeUpdate(createUsersTable);
 
             String createBankAccountTable = "CREATE TABLE IF NOT EXISTS bankAccount (" +
-                    "account_id INTEGER PRIMARY KEY AUTOINCREMENT," +
-                    "account_number TEXT UNIQUE NOT NULL," +
+                    "accountId INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    "accountNumber TEXT UNIQUE NOT NULL," +
                     "balance REAL NOT NULL," +
-                    "account_type TEXT NOT NULL," +
-                    "creation_date TEXT NOT NULL," +
-                    "user_id INTEGER NOT NULL," +
-                    "FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE" +
+                    "accountType TEXT NOT NULL," +
+                    "creationDate TEXT NOT NULL," +
+                    "userId INTEGER NOT NULL," +
+                    "FOREIGN KEY (userId) REFERENCES users(userId) ON DELETE CASCADE" +
                     ")";
             statement.executeUpdate(createBankAccountTable);
 
             String createInvestmentsTable = "CREATE TABLE IF NOT EXISTS investments (" +
-                    "investment_id INTEGER PRIMARY KEY NOT NULL," +
-                    "investment_name TEXT NOT NULL," +
-                    "investment_amount REAL NOT NULL," +
-                    "annual_return_date TEXT NOT  NULL)";
+                    "investmentId INTEGER PRIMARY KEY NOT NULL," +
+                    "investmentName TEXT NOT NULL," +
+                    "investmentAmount REAL NOT NULL," +
+                    "annualReturnDate TEXT NOT NULL)";
             statement.executeUpdate(createInvestmentsTable);
 
             String createUserInvestmentsTable = "CREATE TABLE IF NOT EXISTS userInvestments (" +
-                    "investment_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
-                    "user_id INTEGER UNIQUE  NOT NULL,"+
-                    "start_date TEXT NOT NULL," +
-                    "end_date TEXT NOT NULL,"+
-                    "FOREIGN KEY (investment_id) REFERENCES investments(investment_id),"+
-                    "FOREIGN KEY (user_id) REFERENCES users(user_id))";
+                    "investmentId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
+                    "userId INTEGER UNIQUE NOT NULL," +
+                    "startDate TEXT NOT NULL," +
+                    "endDate TEXT NOT NULL," +
+                    "FOREIGN KEY (investmentId) REFERENCES investments(investmentId)," +
+                    "FOREIGN KEY (userId) REFERENCES users(userId))";
             statement.executeUpdate(createUserInvestmentsTable);
 
             String createInvestmentsBankAccountTable = "CREATE TABLE IF NOT EXISTS investmentBankAccount (" +
-                    "investiment_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
-                    "account_id INTEGER UNIQUE NOT NULL," +
-                    "FOREIGN KEY (investiment_id) REFERENCES investments(investment_id)," +
-                    "FOREIGN KEY (account_id) REFERENCES bankAccount(account_id))";
+                    "investmentId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
+                    "accountId INTEGER UNIQUE NOT NULL," +
+                    "FOREIGN KEY (investmentId) REFERENCES investments(investmentId)," +
+                    "FOREIGN KEY (accountId) REFERENCES bankAccount(accountId))";
             statement.executeUpdate(createInvestmentsBankAccountTable);
 
             String createLoanTable = "CREATE TABLE IF NOT EXISTS loan (" +
-                    "loan_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
-                    "loan_amount INTEGER NOT NULL," +
-                    "annual_interest_rate REAL NOT NULL," +
-                    "loan_term_months INTEGER NOT NULL," +
-                    "request_date TEXT NOT NULL," +
-                    "loan_date TEXT NOT NULL," +
-                    "loan_status TEXT NOT NULL," +
-                    "account_id INTEGER NOT NULL," +
-                    "user_id INTEGER NOT NULL," +
-                    "FOREIGN KEY (account_id) REFERENCES bankAccount(account_id)," +
-                    "FOREIGN KEY (user_id) REFERENCES users(user_id))";
+                    "loanId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
+                    "loanAmount INTEGER NOT NULL," +
+                    "annualInterestRate REAL NOT NULL," +
+                    "loanTermMonths INTEGER NOT NULL," +
+                    "requestDate TEXT NOT NULL," +
+                    "loanDate TEXT NOT NULL," +
+                    "loanStatus TEXT NOT NULL," +
+                    "accountId INTEGER NOT NULL," +
+                    "userId INTEGER NOT NULL," +
+                    "FOREIGN KEY (accountId) REFERENCES bankAccount(accountId)," +
+                    "FOREIGN KEY (userId) REFERENCES users(userId))";
             statement.executeUpdate(createLoanTable);
 
             String createTransactionsTable = "CREATE TABLE IF NOT EXISTS transactions(" +
-                    "transaction_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
-                    "transaction_amount REAL NOT NULL," +
-                    "transaction_type TEXT NOT NULL," +
-                    "user_id INTEGER NOT NULL," +
-                    "FOREIGN KEY (user_id) REFERENCES users(user_id))";
+                    "transactionId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
+                    "transactionAmount REAL NOT NULL," +
+                    "transactionType TEXT NOT NULL," +
+                    "userId INTEGER NOT NULL," +
+                    "FOREIGN KEY (userId) REFERENCES users(userId))";
             statement.executeUpdate(createTransactionsTable);
 
             String createTransactionsBankAccountTable = "CREATE TABLE IF NOT EXISTS transactionsBankAccount(" +
-                    "transaction_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
-                    "account_id INTEGER UNIQUE NOT NULL," +
-                    "transfer_date TEXT NOT NULL," +
-                    "FOREIGN KEY (transaction_id) REFERENCES transactions(transaction_id), " +
-                    "FOREIGN KEY (account_id) REFERENCES bankAccount(account_id))";
+                    "transactionId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
+                    "accountId INTEGER UNIQUE NOT NULL," +
+                    "transferDate TEXT NOT NULL," +
+                    "FOREIGN KEY (transactionId) REFERENCES transactions(transactionId), " +
+                    "FOREIGN KEY (accountId) REFERENCES bankAccount(accountId))";
             statement.executeUpdate(createTransactionsBankAccountTable);
 
             System.out.println("Tables created successfully.");
-        }
-        catch (ClassNotFoundException | SQLException e) {
+        } catch (ClassNotFoundException | SQLException e) {
             System.err.println("Error when creating tables: " + e.getMessage());
-        }
-        finally {
+        } finally {
             try {
                 if (statement != null) {
                     statement.close();
@@ -104,7 +103,7 @@ public class CreateTables {
                     connection.close();
                 }
             } catch (SQLException e) {
-                System.err.println("Erro closing connection: " + e.getMessage());
+                System.err.println("Error closing connection: " + e.getMessage());
             }
         }
     }
