@@ -1,0 +1,21 @@
+User Operations:
+    userController.createUser(user);
+    userController.deleteUser(); // deletes an user
+    userController.getUserId("useremail@gmail.com"); // returns the email of the specified user
+    userController.getUserById(1); // returns the user with the specified ID
+    userController.editUserPassword(1, "userNewPassword"); edits the user's password
+    userController.editUserUsername(1, "usersNewUsername"); edit's the user's username
+    userController.verifyUserEmail("useremail@gmail.com"); // returns boolean expression
+    userController.verifyUserPassword("user-password"); // returns boolean expression
+    userController.getUsers(); // gets all users
+    userController.showUsers(); // this is method to visualize the return of getUsers in the prompt
+    userController.verifyUserId(); // returns boolean expression
+
+Bank Account Operations:
+    bankAccountController.createBankAccount(bankAccount, "emailqualquerkkk@gmail.com", 7); creates a bank account
+    bankAccountController.deleteAccount(2); deletes an account
+    bankAccountController.getBankAccounts(); gets all bank accounts
+    bankAccountController.showBankAccounts(); shows all bank accounts in the prompt
+    bankAccountController.getAccountById(3);  gets an account given an Id
+    bankAccountController.getBalanceById("1234567890");  gets the account balance
+    bankAccountController.updateBalance(200,3);  updates the balance value of an account
