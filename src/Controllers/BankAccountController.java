@@ -72,7 +72,7 @@ public class BankAccountController {
             System.out.println("Bank Accounts list:\n ");
             for (BankAccount bankAccount: bankAccountsArray){
                 System.out.println("Account number: " + bankAccount.getAccountNumber());
-                System.out.println("Balance: " + bankAccount.getBalance());
+                System.out.println("Balance: R$ " + bankAccount.getBalance());
                 System.out.println("Account type: " + bankAccount.getAccountType());
                 System.out.println("Creation date: " + bankAccount.getDateCreated());
                 System.out.println("-----------------------");
@@ -99,8 +99,54 @@ public class BankAccountController {
         return null;
     }
 
-    public void addBalance(float amount) throws SQLException {
-        // todo
+    public void updateBalance(float amount, int userId) throws SQLException {
+        try (Connection connection = DBConnection.getConnection(dbPath)) {
+            String selectQuery = "SELECT balance FROM bankAccount WHERE userId = ?";
+            float currentBalance = 0.0f;
+
+            try (PreparedStatement selectQueryStatement = connection.prepareStatement(selectQuery)) {
+                selectQueryStatement.setInt(1, userId);
+
+                try (ResultSet resultSet = selectQueryStatement.executeQuery()) {
+                    if (resultSet.next()) {
+                        currentBalance = resultSet.getFloat("balance");
+                    }
+                }
+            }
+            float newBalance = currentBalance + amount;
+            String updateQuery = "UPDATE bankAccount SET balance = ? WHERE userId = ?";
+
+            try (PreparedStatement updateStatement = connection.prepareStatement(updateQuery)) {
+                updateStatement.setFloat(1, newBalance);
+                updateStatement.setInt(2, userId);
+                updateStatement.executeUpdate();
+                System.out.println("Balance updated successfully!");
+            }
+        } catch (SQLException Error) {
+            System.err.println("Error updating balance: " + Error.getMessage());
+            throw Error;
+        }
+    }
+
+    public float getBalanceById(String accountNumber) throws SQLException{
+        String query = "SELECT balance FROM bankAccount WHERE accountNumber = ?";
+        float balance = 0.0f;
+
+        try (Connection connection = DBConnection.getConnection(dbPath);
+             PreparedStatement preparedStatement = connection.prepareStatement(query))  {
+            preparedStatement.setString(1, accountNumber);
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    return resultSet.getFloat("balance");
+                }
+            }
+        }
+        catch (SQLException Error){
+            System.err.println("Error getting account's balance: " + Error.getMessage());
+            throw Error;
+        }
+        return balance;
     }
 
 }
