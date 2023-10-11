@@ -19,3 +19,10 @@ Bank Account Operations:
     bankAccountController.getAccountById(3);  gets an account given an Id
     bankAccountController.getBalanceById("1234567890");  gets the account balance
     bankAccountController.updateBalance(200,3);  updates the balance value of an account
+
+Transaction Operations:
+    transactionController.createTransaction(transaction, userId); creates a transaction
+    transactionController.getTransactionByUserId(userId); gets a transaction given a user Id
+    transactionController.getTransactionById(transactionId);  gets a transaction given a transaction Id
+    transactionController.getTransactionsByType(transactionType); gets a list of transactions given a transaction type
+    transactionController.
