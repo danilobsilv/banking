@@ -25,4 +25,3 @@ Transaction Operations:
     transactionController.getTransactionByUserId(userId); gets a transaction given a user Id
     transactionController.getTransactionById(transactionId);  gets a transaction given a transaction Id
     transactionController.getTransactionsByType(transactionType); gets a list of transactions given a transaction type
-    transactionController.
