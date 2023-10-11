@@ -1,15 +1,22 @@
 package src.App;
 
-import src.Database.DBConnection;
-import src.Database.CreateTables;
-
+import src.Controllers.BankAccountController;
+import src.Controllers.TransactionController;
 import src.Controllers.UserController;
+
+import src.Database.ExecuteQuery;
+
+import src.Models.BankAccount;
+import src.Models.Transaction;
 import src.Models.User;
 
-import java.sql.SQLException;
+import src.enumerate.AccountType;
+import src.enumerate.TransactionType;
+
+import java.util.Date;
 
 public class App {
-    public static void main(String[] args) throws SQLException {
-        //todo
+    public static void main(String[] args) throws Exception {
+        // todo
     }
 }
