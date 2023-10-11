@@ -49,4 +49,14 @@ public class BankAccount {
     public void setAccountType(AccountType accountType) { // Correção aqui
         this.accountType = accountType;
     }
+
+    @Override
+    public String toString() {
+        return "BankAccount{" +
+                "accountNumber='" + accountNumber + '\'' +
+                ", balance=" + balance +
+                ", accountType=" + accountType +
+                ", dateCreated=" + dateCreated +
+                '}';
+    }
 }
