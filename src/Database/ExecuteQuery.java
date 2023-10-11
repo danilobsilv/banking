@@ -1,8 +1,10 @@
 package src.Database;
 
+import src.Models.Transaction;
 import src.Models.User;
 import src.Models.BankAccount;
 import src.enumerate.AccountType;
+import src.enumerate.TransactionType;
 
 import java.sql.*;
 
@@ -130,4 +132,36 @@ public class ExecuteQuery implements AutoCloseable{
         return new BankAccount(accountNUmber, balance, accountType, creationDate);
     }
 
+    public Transaction mapTransactionFromResultSet(ResultSet resultSet) throws SQLException {
+        float transactionAmount = resultSet.getFloat("transactionAmount");
+        String transactionType = resultSet.getString("transactionType");
+        TransactionType transactionTypeValue = TransactionType.valueOf(transactionType);
+
+        return new Transaction(transactionAmount, transactionTypeValue);
+    }
+
+
+    public Transaction mapTransactionFromTransactionId(Integer transactionId) throws SQLException {
+        String getTransactionQuery = "SELECT * FROM transactions WHERE transactionId = ?";
+
+        try (Connection connection = DBConnection.getConnection(dbPath);
+             PreparedStatement preparedStatement = connection.prepareStatement(getTransactionQuery)) {
+            preparedStatement.setInt(1, transactionId);
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    float transactionAmount = resultSet.getFloat("transactionAmount");
+                    String transactionType = resultSet.getString("transactionType");
+
+                    TransactionType transactionTypeValue = TransactionType.valueOf(transactionType);
+
+                    return new Transaction(transactionAmount, transactionTypeValue);
+                }
+            }
+        } catch (SQLException Error) {
+            System.err.println("Error mapping transaction from transaction ID: " + Error.getMessage());
+            throw Error;
+        }
+        return null;
+    }
 }
