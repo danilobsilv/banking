@@ -2,20 +2,23 @@ package src.Models;
 
 import java.util.Date;
 
+import src.enumerate.LoanStatusTypes;
+
 public class Loan {
 
     float loanAmount;
     float annualInterestRate;
     Integer loanTermMonths;
+    Date requestDate;
     Date loanDate;
-    String loanStatus;
+    LoanStatusTypes loanStatus;
 
     public Loan(float loanAmount, float annualInterestRate,
-                Integer loanTermMonths, Date loanDate, String loanStatus) {
+                Integer loanTermMonths, Date requestDate, LoanStatusTypes loanStatus) {
         this.loanAmount = loanAmount;
         this.annualInterestRate = annualInterestRate;
         this.loanTermMonths = loanTermMonths;
-        this.loanDate = loanDate;
+        this.requestDate = requestDate;
         this.loanStatus = loanStatus;
     }
 
@@ -43,10 +46,31 @@ public class Loan {
     public void setLoanDate(Date loanDate) {
         this.loanDate = loanDate;
     }
-    public String getLoanStatus() {
+
+    public LoanStatusTypes getLoanStatus() {
         return loanStatus;
     }
-    public void setLoanStatus(String loanStatus) {
+
+    public void setLoanStatus(LoanStatusTypes loanStatus) {
         this.loanStatus = loanStatus;
+    }
+
+    public Date getRequestDate() {
+        return requestDate;
+    }
+
+    public void setRequestDate(Date requestDate) {
+        this.requestDate = requestDate;
+    }
+
+    @Override
+    public String toString() {
+        return "Loan {" +
+                "loanAmount = " + loanAmount +
+                ", annualInterestRate = " + annualInterestRate +
+                ", loanTermMonths = " + loanTermMonths +
+                ", loanDate = " + loanDate +
+                ", loanStatus ='" + loanStatus + '\'' +
+                " }";
     }
 }
