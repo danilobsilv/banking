@@ -67,7 +67,6 @@ public class CreateTables {
                     "annualInterestRate REAL NOT NULL," +
                     "loanTermMonths INTEGER NOT NULL," +
                     "requestDate TEXT NOT NULL," +
-                    "loanDate TEXT NOT NULL," +
                     "loanStatus TEXT NOT NULL," +
                     "accountId INTEGER NOT NULL," +
                     "userId INTEGER NOT NULL," +
