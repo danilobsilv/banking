@@ -22,7 +22,7 @@ public class BankAccountController {
         this.executeQuery = new ExecuteQuery();
     }
 
-    public void createBankAccount(BankAccount bankAccount, String userEmail, int userId) throws SQLException {
+    public void createBankAccount(BankAccount bankAccount, int userId) throws SQLException {
         String query = "INSERT INTO bankAccount (accountNumber, balance, accountType, creationDate, userId) VALUES (?, ?, ?, ?, ?)";
 
         try {
