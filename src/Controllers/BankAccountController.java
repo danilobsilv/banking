@@ -59,6 +59,10 @@ public class BankAccountController {
                     bankAccountArray.add(this.executeQuery.mapBankAccountFromResultSet(resultSet));
                 }
         }
+        catch (SQLException Error){
+            System.err.println("Error getting bank accounts: " + Error.getMessage());
+            throw Error;
+        }
         return bankAccountArray;
     }
 
