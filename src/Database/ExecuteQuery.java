@@ -1,9 +1,12 @@
 package src.Database;
 
+import src.Models.Loan;
 import src.Models.Transaction;
 import src.Models.User;
 import src.Models.BankAccount;
+
 import src.enumerate.AccountType;
+import src.enumerate.LoanStatusTypes;
 import src.enumerate.TransactionType;
 
 import java.sql.*;
@@ -130,6 +133,17 @@ public class ExecuteQuery implements AutoCloseable{
 
         Date creationDate = new Date(creationDateMillis);
         return new BankAccount(accountNUmber, balance, accountType, creationDate);
+    }
+
+    public Loan mapLoanFromResultSet(ResultSet resultSet) throws SQLException {
+        float loanAmount = resultSet.getFloat("loanAmount");
+        float annualInterestRate = resultSet.getFloat("annualInterestRate");
+        int loanTermMonths = resultSet.getInt("loanTermMonths");
+        long requestDate = resultSet.getLong("requestDate");
+        LoanStatusTypes loanStatus = LoanStatusTypes.valueOf(resultSet.getString("loanStatus"));
+
+        Date reqDate = new Date(requestDate);
+        return new Loan(loanAmount,annualInterestRate,loanTermMonths, reqDate, loanStatus);
     }
 
     public Transaction mapTransactionFromResultSet(ResultSet resultSet) throws SQLException {
