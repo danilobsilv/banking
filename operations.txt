@@ -12,7 +12,7 @@ User Operations:
     userController.verifyUserId(); // returns boolean expression
 
 Bank Account Operations:
-    bankAccountController.createBankAccount(bankAccount, "emailqualquerkkk@gmail.com", 7); creates a bank account
+    bankAccountController.createBankAccount(bankAccount, email, userId); creates a bank account
     bankAccountController.deleteAccount(2); deletes an account
     bankAccountController.getBankAccounts(); gets all bank accounts
     bankAccountController.showBankAccounts(); shows all bank accounts in the prompt
@@ -25,3 +25,14 @@ Transaction Operations:
     transactionController.getTransactionByUserId(userId); gets a transaction given a user Id
     transactionController.getTransactionById(transactionId);  gets a transaction given a transaction Id
     transactionController.getTransactionsByType(transactionType); gets a list of transactions given a transaction type
+
+Loan Operations:
+    loanController.createLoan(loan, accountId, userId); creates a loan
+    loanController.deleteLoan(loanId); deletes a loan given the id of the loan
+    loanController.updateLoanStatus(loanId, newStatus);  updates the status of a loan
+    loanController.getLoanById(loanId); gets a loan given a loanId
+    loanController.getLoansByUser(userId); gets all the loans an user has
+    loanController.getLoansByAccountId(accountId); gets all the loans given an account id;
+    loanController.calculateMonthlyPaymentForLoan(loanId);
+    loanController.calculateMonthlyPayment(loanAmount, annualInterestRate, loanTermMonths); calculates the monthly payment
+    loanController.getLoanStatus(loanStatus); gets all the loans with the given status
