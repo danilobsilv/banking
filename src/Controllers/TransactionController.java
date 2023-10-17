@@ -16,10 +16,8 @@ import java.util.List;
 public class TransactionController {
     private final String dbPath = "bankApp.db";
     ExecuteQuery executeQuery;
-    UserController userController;
     public TransactionController(){
         this.executeQuery = new ExecuteQuery();
-        this.userController = new UserController();
     }
 
     public void createTransaction(Transaction transaction, Integer userId) throws SQLException{
