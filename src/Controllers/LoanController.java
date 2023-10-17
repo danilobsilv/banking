@@ -87,8 +87,6 @@ public class LoanController {
         return loan;
     }
 
-
-
     public List<Loan> getLoansByUser(int userId) throws SQLException {
         List<Loan> loanArray = new ArrayList<>();
         String query = "SELECT * FROM loan WHERE userId = ?";
@@ -132,7 +130,6 @@ public class LoanController {
         }
     }
 
-
     public float calculateMonthlyPaymentForLoan(int loanId) throws SQLException {
         String query = "SELECT loanAmount, annualInterestRate, loanTermMonths FROM loan WHERE loanId = ?";
 
@@ -167,18 +164,24 @@ public class LoanController {
         return (float) monthlyPayment;
     }
 
-
-
-    public List<Loan> getActiveLoans(){
+    public List<Loan> getLoanStatus(LoanStatusTypes loanStatus) throws SQLException {
         List<Loan> loanArray = new ArrayList<>();
+        String query = "SELECT * FROM loan WHERE loanStatus = ?";
 
+        try (Connection connection = DBConnection.getConnection(dbPath);
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+
+            preparedStatement.setString(1, loanStatus.toString());
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    loanArray.add(this.executeQuery.mapLoanFromResultSet(resultSet));
+                }
+            }
+        } catch (SQLException Error) {
+            System.err.println("Error getting transactions: " + Error.getMessage());
+            throw Error;
+        }
         return loanArray;
     }
-
-
-    public List<Loan> getPaidLoans(){
-        List<Loan> loanArray = new ArrayList<>();
-
-        return loanArray;
-    }
-    }
+}
