@@ -85,7 +85,7 @@ public class TransactionController {
         try (Connection connection = DBConnection.getConnection(dbPath);
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
 
-            preparedStatement.setString(1, transactionType.toString()); // Defina o valor do parâmetro
+            preparedStatement.setString(1, transactionType.toString());
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 while (resultSet.next()) {
