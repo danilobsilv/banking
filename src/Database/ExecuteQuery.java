@@ -1,11 +1,9 @@
 package src.Database;
 
-import src.Models.Loan;
-import src.Models.Transaction;
-import src.Models.User;
-import src.Models.BankAccount;
+import src.Models.*;
 
 import src.enumerate.AccountType;
+import src.enumerate.InvestimentTypeNames;
 import src.enumerate.LoanStatusTypes;
 import src.enumerate.TransactionType;
 
@@ -144,6 +142,18 @@ public class ExecuteQuery implements AutoCloseable{
 
         Date reqDate = new Date(requestDate);
         return new Loan(loanAmount,annualInterestRate,loanTermMonths, reqDate, loanStatus);
+    }
+
+    public Investment mapInvestmentsFromResultSet(ResultSet resultSet) throws SQLException {
+        InvestimentTypeNames investmentName = InvestimentTypeNames.valueOf(resultSet.getString("investmentName"));
+        float investmentAmount = resultSet.getFloat("investmentAmount");
+        float annualReturnDate = resultSet.getFloat("annualReturnDate");
+        long startDateSet = resultSet.getLong("startDate");
+        long endDateSet = resultSet.getLong("endDate");
+
+        Date startDate = new Date(startDateSet);
+        Date endDate = new Date(endDateSet);
+        return new Investment(investmentName, investmentAmount, annualReturnDate, startDate, endDate);
     }
 
     public Transaction mapTransactionFromResultSet(ResultSet resultSet) throws SQLException {
