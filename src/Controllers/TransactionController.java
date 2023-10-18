@@ -4,7 +4,6 @@ import src.Database.DBConnection;
 import src.Database.ExecuteQuery;
 
 import src.Models.Transaction;
-import src.Controllers.UserController;
 
 import src.enumerate.TransactionType;
 
