@@ -3,7 +3,7 @@ package src.Database;
 import src.Models.*;
 
 import src.enumerate.AccountType;
-import src.enumerate.InvestimentTypeNames;
+import src.enumerate.InvestmentTypeNames;
 import src.enumerate.LoanStatusTypes;
 import src.enumerate.TransactionType;
 
@@ -145,7 +145,7 @@ public class ExecuteQuery implements AutoCloseable{
     }
 
     public Investment mapInvestmentsFromResultSet(ResultSet resultSet) throws SQLException {
-        InvestimentTypeNames investmentName = InvestimentTypeNames.valueOf(resultSet.getString("investmentName"));
+        InvestmentTypeNames investmentName = InvestmentTypeNames.valueOf(resultSet.getString("investmentName"));
         float investmentAmount = resultSet.getFloat("investmentAmount");
         float annualReturnDate = resultSet.getFloat("annualReturnDate");
         long startDateSet = resultSet.getLong("startDate");
