@@ -1,28 +1,32 @@
 package src.Models;
 
+import src.enumerate.InvestmentTypeNames;
+
 import java.util.Date;
 
 public class Investment {
 
-    String investmentName;
+    InvestmentTypeNames investmentName;
+    float investmentAmount;
     float annualReturnRate;
     Date startDate;
     Date endDate;
 
-    public Investment(String investmentName, float annualReturnRate,
-                       Date startDate, Date endDate) {
+    public Investment(InvestmentTypeNames investmentName, float investmentAmount, float annualReturnRate,
+                      Date startDate, Date endDate) {
         this.investmentName = investmentName;
+        this.investmentAmount = investmentAmount;
         this.annualReturnRate = annualReturnRate;
         this.startDate = startDate;
         this.endDate = endDate;
     }
 
 
-    public String getInvestmentName() {
+    public InvestmentTypeNames getInvestmentName() {
         return investmentName;
     }
 
-    public void setInvestmentName(String investmentName) {
+    public void setInvestmentName(InvestmentTypeNames investmentName) {
         this.investmentName = investmentName;
     }
 
@@ -48,6 +52,25 @@ public class Investment {
 
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
+    }
+
+    public float getInvestmentAmount() {
+        return investmentAmount;
+    }
+
+    public void setInvestmentAmount(float investmentAmount) {
+        this.investmentAmount = investmentAmount;
+    }
+
+    @Override
+    public String toString() {
+        return "Investment{" +
+                "investmentName='" + investmentName + '\'' +
+                ", investmentAmount=" + investmentAmount +
+                ", annualReturnRate=" + annualReturnRate +
+                ", startDate=" + startDate +
+                ", endDate=" + endDate +
+                '}';
     }
 }
 
