@@ -19,7 +19,7 @@ import src.env.ConfigurationReader;
 public class UserController{
 
     Properties properties = ConfigurationReader.loadProperties();
-    private final String dbPath = properties.getProperty("dbPath", null);
+    private final String dbPath = properties.getProperty("DATABASE_PATH");
     ExecuteQuery executeQuery;
 
     public UserController() throws IOException {

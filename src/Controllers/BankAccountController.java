@@ -19,7 +19,7 @@ import src.env.ConfigurationReader;
 public class BankAccountController {
 
     Properties properties = ConfigurationReader.loadProperties();
-    private final String dbPath = properties.getProperty("dbPath", null);
+    private final String dbPath = properties.getProperty("DATABASE_PATH");
     private final ExecuteQuery executeQuery;
 
 

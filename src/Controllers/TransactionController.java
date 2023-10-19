@@ -18,7 +18,7 @@ import java.util.Properties;
 public class TransactionController {
 
     Properties properties = ConfigurationReader.loadProperties();
-    private final String dbPath = properties.getProperty("dbPath", null);
+    private final String dbPath = properties.getProperty("DATABASE_PATH");
     ExecuteQuery executeQuery;
     public TransactionController() throws IOException {
         this.executeQuery = new ExecuteQuery();
