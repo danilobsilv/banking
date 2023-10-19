@@ -32,7 +32,14 @@ Loan Operations:
     loanController.updateLoanStatus(loanId, newStatus);  updates the status of a loan
     loanController.getLoanById(loanId); gets a loan given a loanId
     loanController.getLoansByUser(userId); gets all the loans an user has
-    loanController.getLoansByAccountId(accountId); gets all the loans given an account id;
+    loanController.getLoansByAccountId(accountId); gets all the loans given an account Id;
     loanController.calculateMonthlyPaymentForLoan(loanId);
     loanController.calculateMonthlyPayment(loanAmount, annualInterestRate, loanTermMonths); calculates the monthly payment
     loanController.getLoanStatus(loanStatus); gets all the loans with the given status
+
+Investment Operations:
+    InvestmentController.createInvestment(Investment investment); creates an investment
+    InvestmentController.deleteInvestment(int investmentId); deletes an investment with the given Id
+    InvestmentController.updateInvestment(int investmentId, String investmentsColumn, String updateContent); updates an investment with the given parameters
+    InvestmentController.listInvestments(); returns a list with all the existing investments
+    InvestmentController.getInvestmentById(int investmentId); returns an investments with the given Id
