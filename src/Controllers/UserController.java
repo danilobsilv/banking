@@ -14,11 +14,11 @@ import src.Database.DBConnection;
 import src.Database.ExecuteQuery;
 
 import src.Models.User;
-import src.env.ConfigurationReader;
+import src.env.ConfigReader;
 
 public class UserController{
 
-    Properties properties = ConfigurationReader.loadProperties();
+    Properties properties = ConfigReader.loadProperties();
     private final String dbPath = properties.getProperty("DATABASE_PATH");
     ExecuteQuery executeQuery;
 

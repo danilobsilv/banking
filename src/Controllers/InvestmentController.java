@@ -4,7 +4,7 @@ import src.Database.DBConnection;
 import src.Database.ExecuteQuery;
 
 import src.Models.Investment;
-import src.env.ConfigurationReader;
+import src.env.ConfigReader;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -18,7 +18,7 @@ import java.util.Properties;
 
 public class InvestmentController {
 
-    Properties properties = ConfigurationReader.loadProperties();
+    Properties properties = ConfigReader.loadProperties();
     private final String dbPath = properties.getProperty("DATABASE_PATH");
     ExecuteQuery executeQuery;
 

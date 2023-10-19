@@ -6,7 +6,7 @@ import src.Database.ExecuteQuery;
 import src.Models.Transaction;
 
 import src.enumerate.TransactionType;
-import src.env.ConfigurationReader;
+import src.env.ConfigReader;
 
 import java.io.IOException;
 import java.sql.*;
@@ -17,7 +17,7 @@ import java.util.Properties;
 
 public class TransactionController {
 
-    Properties properties = ConfigurationReader.loadProperties();
+    Properties properties = ConfigReader.loadProperties();
     private final String dbPath = properties.getProperty("DATABASE_PATH");
     ExecuteQuery executeQuery;
     public TransactionController() throws IOException {

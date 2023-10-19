@@ -14,11 +14,11 @@ import src.Database.DBConnection;
 import src.Database.ExecuteQuery;
 
 import src.Models.BankAccount;
-import src.env.ConfigurationReader;
+import src.env.ConfigReader;
 
 public class BankAccountController {
 
-    Properties properties = ConfigurationReader.loadProperties();
+    Properties properties = ConfigReader.loadProperties();
     private final String dbPath = properties.getProperty("DATABASE_PATH");
     private final ExecuteQuery executeQuery;
 

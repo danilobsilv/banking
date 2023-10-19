@@ -16,12 +16,12 @@ import java.util.List;
 import java.util.Properties;
 
 import src.enumerate.LoanStatusTypes;
-import src.env.ConfigurationReader;
+import src.env.ConfigReader;
 
 
 public class LoanController {
 
-    Properties properties = ConfigurationReader.loadProperties();
+    Properties properties = ConfigReader.loadProperties();
     private final String dbPath = properties.getProperty("DATABASE_PATH");
     private final ExecuteQuery executeQuery;
 
