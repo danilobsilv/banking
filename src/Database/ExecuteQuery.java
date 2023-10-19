@@ -9,46 +9,38 @@ import src.enumerate.TransactionType;
 
 import java.sql.*;
 
-public class ExecuteQuery implements AutoCloseable{
+public class ExecuteQuery {
     final String dbPath = "bankApp.db";
-    public void executeQuery(String query, Object... params) throws SQLException {
-
+    private void executeQueryInternal(String query, Object... params) throws SQLException {
         try (Connection connection = DBConnection.getConnection(dbPath);
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             for (int i = 0; i < params.length; i++) {
                 preparedStatement.setObject(i + 1, params[i]);
             }
-            preparedStatement.executeUpdate();
+
+            if (query.toLowerCase().trim().startsWith("select")) {
+                try (ResultSet resultSet = preparedStatement.executeQuery()) {
+
+                }
+            } else {
+                preparedStatement.executeUpdate();
+            }
         }
     }
 
-        public boolean emailExists(String query, String email) throws SQLException {
-            int count = 0;
-            try (Connection connection = DBConnection.getConnection(dbPath);
-                 PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-                preparedStatement.setString(1, email);
+    public void executeQuery(String query, Object... params) throws SQLException {
+        executeQueryInternal(query, params);
+    }
 
-                try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                    if (resultSet.next()) {
-                        count = ((ResultSet) resultSet).getInt(1);
-                    }
-                }
-            }
-            return count > 0;
-        }
+    public boolean emailExists(String query, String email) throws SQLException {
+        int count = 0;
+        executeQueryInternal(query, email);
+        return count > 0;
+    }
 
     public boolean passwordExists(String query, String password) throws SQLException {
         int count = 0;
-        try (Connection connection = DBConnection.getConnection(dbPath);
-             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setString(1, password);
-
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                if (resultSet.next()) {
-                    count = ((ResultSet) resultSet).getInt(1);
-                }
-            }
-        }
+        executeQueryInternal(query, password);
         return count > 0;
     }
 
@@ -89,11 +81,6 @@ public class ExecuteQuery implements AutoCloseable{
             }
         }
         return false;
-    }
-
-    @Override
-    public void close() throws Exception {
-        // todo
     }
 
     public int executeIntQuery(String query, Object... params) throws SQLException {
