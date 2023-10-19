@@ -6,16 +6,21 @@ import src.Database.ExecuteQuery;
 import src.Models.Transaction;
 
 import src.enumerate.TransactionType;
+import src.env.ConfigurationReader;
 
+import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 
 public class TransactionController {
-    private final String dbPath = "bankApp.db";
+
+    Properties properties = ConfigurationReader.loadProperties();
+    private final String dbPath = properties.getProperty("dbPath", null);
     ExecuteQuery executeQuery;
-    public TransactionController(){
+    public TransactionController() throws IOException {
         this.executeQuery = new ExecuteQuery();
     }
 

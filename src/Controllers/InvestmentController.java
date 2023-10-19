@@ -4,7 +4,9 @@ import src.Database.DBConnection;
 import src.Database.ExecuteQuery;
 
 import src.Models.Investment;
+import src.env.ConfigurationReader;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -12,12 +14,15 @@ import java.sql.SQLException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 public class InvestmentController {
-    private final String dbPath = "bankApp.db";
+
+    Properties properties = ConfigurationReader.loadProperties();
+    private final String dbPath = properties.getProperty("dbPath", null);
     ExecuteQuery executeQuery;
 
-    public InvestmentController(){
+    public InvestmentController() throws IOException {
         this.executeQuery = new ExecuteQuery();
     }
 

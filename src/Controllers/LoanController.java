@@ -5,6 +5,7 @@ import src.Database.ExecuteQuery;
 
 import src.Models.Loan;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -12,16 +13,19 @@ import java.sql.SQLException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 import src.enumerate.LoanStatusTypes;
+import src.env.ConfigurationReader;
 
 
 public class LoanController {
 
+    Properties properties = ConfigurationReader.loadProperties();
+    private final String dbPath = properties.getProperty("dbPath", null);
     private final ExecuteQuery executeQuery;
-    private final String dbPath = "bankApp.db";
 
-    public LoanController(){
+    public LoanController() throws IOException {
         this.executeQuery = new ExecuteQuery();
     }
 

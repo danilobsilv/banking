@@ -1,5 +1,6 @@
 package src.Controllers;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -7,31 +8,35 @@ import java.sql.SQLException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 import src.Database.DBConnection;
 import src.Database.ExecuteQuery;
 
 import src.Models.User;
+import src.env.ConfigurationReader;
 
 public class UserController{
 
-    private final static String dbPath = "bankApp.db";
+    Properties properties = ConfigurationReader.loadProperties();
+    private final String dbPath = properties.getProperty("dbPath", null);
     ExecuteQuery executeQuery;
 
-    public UserController() {
+    public UserController() throws IOException {
         this.executeQuery = new ExecuteQuery();
     }
 
     public void createUser(User user) throws SQLException {
         String query = "INSERT INTO users (username, userEmail, password, datestamp) VALUES (?, ?, ?, ?)";
-        this.executeQuery.executeQuery(query, user.getUsername(), user.getEmail(), user.getPassword(), user.getCreationDate());
+        try{
+            this.executeQuery.executeQuery(query, user.getUsername(), user.getEmail(), user.getPassword(), user.getCreationDate());
+        }
+        catch (SQLException Error){
+            System.err.println("Error creating user: " + Error.getMessage());
+            throw Error;
+        }
     }
 
-
-    public int getUserId(String email) throws SQLException {
-        String query = "SELECT userId FROM users WHERE userEmail = ?";
-        return this.executeQuery.executeIntQuery(query, email);
-    }
 
     public User getUserById(int userId) throws SQLException {
         String query = "SELECT * FROM users WHERE userId = ?";

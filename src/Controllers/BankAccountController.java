@@ -1,5 +1,6 @@
 package src.Controllers;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -7,18 +8,22 @@ import java.sql.SQLException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 import src.Database.DBConnection;
 import src.Database.ExecuteQuery;
 
 import src.Models.BankAccount;
+import src.env.ConfigurationReader;
 
 public class BankAccountController {
-    private final String dbPath = "bankApp.db";
+
+    Properties properties = ConfigurationReader.loadProperties();
+    private final String dbPath = properties.getProperty("dbPath", null);
     private final ExecuteQuery executeQuery;
 
 
-    public BankAccountController() {
+    public BankAccountController() throws IOException {
         this.executeQuery = new ExecuteQuery();
     }
 
