@@ -42,7 +42,9 @@ public class CreateTables {
                     "investmentId INTEGER PRIMARY KEY NOT NULL," +
                     "investmentName TEXT NOT NULL," +
                     "investmentAmount REAL NOT NULL," +
-                    "annualReturnDate TEXT NOT NULL)";
+                    "annualReturnDate TEXT NOT NULL" +
+                    "startDate TEXT NOT NULL" +
+                    "endDate TEXT NOT NULL)";
             statement.executeUpdate(createInvestmentsTable);
 
             String createUserInvestmentsTable = "CREATE TABLE IF NOT EXISTS userInvestments (" +
