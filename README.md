@@ -72,3 +72,11 @@
     <li><strong>.getInvestmentById(int investmentId) - returns an investments with the given Id</strong></li>
 
 </ul>
+<h3>Bank Reports</h3>
+<ul>
+    <li><strong>.getInvestmentForecast(int investmentId) - returns investment forecasts given an Id</strong></li>
+    <li><strong>.getInterestLoanCalculations(int loanId) - returns interest loan calculations given an Id</strong></li>
+
+
+
+</ul>
