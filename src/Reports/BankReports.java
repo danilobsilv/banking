@@ -1,4 +1,4 @@
-package src.Database;
+package src.Reports;
 
 import src.env.ConfigReader;
 
@@ -84,11 +84,12 @@ public class BankReports {
     }
 
 
-    /*
+    // Pagamentos Mensais (E): E = P * (r * (1 + r)^n) / ((1 + r)^n - 1)
     public long getInterestLoanCalculations(){
         // todo
     }
 
+    /*
     public long getBalanceInquires(){
         // todo
     }
