@@ -3,14 +3,16 @@ package src.Reports;
 import src.env.ConfigReader;
 
 import src.Controllers.InvestmentController;
+import src.Controllers.LoanController;
 
 import src.Models.Investment;
+import src.Models.Loan;
 
 import java.io.IOException;
 
-
 import java.sql.SQLException;
 
+import java.text.DecimalFormat;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -25,11 +27,13 @@ import java.math.RoundingMode;
 public class BankReports {
 
     InvestmentController investmentController;
+    LoanController loanController;
     Properties properties = ConfigReader.loadProperties();
     private final String dbPath = properties.getProperty("DATABASE_PATH");
 
     public BankReports() throws IOException {
         this.investmentController = new InvestmentController();
+        this.loanController = new LoanController();
     }
 
 
@@ -76,6 +80,9 @@ public class BankReports {
                 // convert the result to double
                 forecast = forecastBigDecimal.doubleValue();
             }
+            else{
+                System.out.println("No investment forecast find for this Id: " + investmentId);
+            }
         } catch (SQLException Error) {
             System.err.println("Error getting investment forecast: " + Error.getMessage());
             throw Error;
@@ -85,18 +92,38 @@ public class BankReports {
 
 
     // Pagamentos Mensais (E): E = P * (r * (1 + r)^n) / ((1 + r)^n - 1)
-    public long getInterestLoanCalculations(){
-        // todo
-    }
+    public double getInterestLoanCalculations(int loanId) throws SQLException {
+        double interestLoan = 0;
 
-    /*
-    public long getBalanceInquires(){
-        // todo
-    }
+        try {
+            Loan loan = this.loanController.getLoanById(loanId);
 
-    public long getFinancialReports(){
-        // todo
-    }
-    */
+            if (loan != null) {
+                double loanAmount = loan.getLoanAmount();
+                double annualInterestRate = loan.getAnnualInterestRate();
+                int loanTermMonths = loan.getLoanTermMonths();
 
+                // calculates monthly payments
+                double monthlyInterestRate = (annualInterestRate / 100) / 12;
+                double monthlyPayment = (loanAmount * monthlyInterestRate) / (1 - Math.pow(1 + monthlyInterestRate, -loanTermMonths));
+
+                // Calculates total interest paid
+                double totalInterestPaid = (monthlyPayment * loanTermMonths) - loanAmount;
+
+                // rounds the result to two decimal places
+                BigDecimal interestBigDecimal = BigDecimal.valueOf(totalInterestPaid);
+                interestBigDecimal = interestBigDecimal.setScale(2, RoundingMode.HALF_UP);
+
+                // converts the result from BigDecimal to double
+                interestLoan = interestBigDecimal.doubleValue();
+            } else {
+                System.out.println("No loans were found with the given Id: " + loanId);
+            }
+        } catch (SQLException Error) {
+            System.err.println("Error getting the interest loan calculation: " + Error.getMessage());
+            throw Error;
+        }
+
+        return interestLoan;
+    }
 }
